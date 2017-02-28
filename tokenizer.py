@@ -1,4 +1,4 @@
-# Test code for Python tokenizer.
+# Python tokenizer.
 
 # Need these to use RegEx to pattern match.
 import re
@@ -48,9 +48,25 @@ def parseForTokens(openFile):
                     
 
 def tokenCheck():
+    tokenString = ""
+    
     for token in regexMatch:
         regex = regexMatch[token]
         matches = re.match(regex, lineFromFile)
         if matches:
-            if (token == "ID" || token == "INTEGER" || token == "REAL"):
-                
+            if token == "ID" or token == "INTEGER" or token == "REAL":
+                # Check if token is already in symbol table. Add if it isn't.
+                STLoc = symbolTableCheck(### Args ###
+                )
+                tokenString = '<' + token ',' + STLoc + '>'
+            elif token == "EQUAL" or token == "COMPARISON" or token == "OP":
+                # Create token with operator.
+                tokenString = '<' + token + ',' + matches.group(0) + '>'
+            else:
+                tokenString = '<' + token + '>'
+            # If a match is found, return the new token.
+            return tokenString
+
+def symbolTableCheck(### Args ###
+):
+    
