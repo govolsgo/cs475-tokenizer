@@ -22,7 +22,7 @@ regexMatch = {
     "EQUAL" : "=",
     "TAB" : "\t",
     "NL" : "\n",
-    "COMPARISON" : "(< | = | > | (<=) | (!=) |(>=) |(==) | (===) | (!==))",
+    "COMPARISON" : "(< | = | > | <= | != | >= | == )",
     "OP" : "[*/+-]",
     "LPAREN" : "\(",
     "RPAREN" : "\)",
@@ -39,6 +39,7 @@ def readInFile():
     return openFile.readlines()
 
 def parseForTokens(openFile):
+    # Read file line-by-line.
     for line in openFile:
         lineFromFile = line
         while len(lineFromFile) > 0:
@@ -52,8 +53,8 @@ def tokenCheck():
     
     for token in regexMatch:
         regex = regexMatch[token]
-        matches = re.match(regex, lineFromFile)
-        if matches:
+        match = re.match(regex, lineFromFile)
+        if match:
             if token == "ID" or token == "INTEGER" or token == "REAL":
                 # Check if token is already in symbol table. Add if it isn't.
                 STLoc = symbolTableCheck(### Args ###
@@ -61,9 +62,11 @@ def tokenCheck():
                 tokenString = '<' + token ',' + STLoc + '>'
             elif token == "EQUAL" or token == "COMPARISON" or token == "OP":
                 # Create token with operator.
-                tokenString = '<' + token + ',' + matches.group(0) + '>'
+                tokenString = '<' + token + ',' + match.group(0) + '>'
             else:
                 tokenString = '<' + token + '>'
+            # Remove token that was read from the input.
+            lineFromFile = lineFromFile[len(match.group(0)):]
             # If a match is found, return the new token.
             return tokenString
 
