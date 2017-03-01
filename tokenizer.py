@@ -1,16 +1,14 @@
-# Python tokenizer.
+# Python Tokenizer
 
 # Need these to use RegEx to pattern match.
 import re
 import sys
 
 fileLoc = ""
-tokens = []
+tokens = ""
 symbolTable = []
 lineFromFile = ""
-
 openFile = readInFile()
-
 regexMatch = {
     "ID" : "([\w\d_])+",
     "INT" : "int",
@@ -35,7 +33,6 @@ regexMatch = {
 def readInFile():
     fileLoc = input("Enter file to parse:")
     openFile = open(fileLoc, r)
-
     return openFile.readlines()
 
 def parseForTokens(openFile):
@@ -46,7 +43,7 @@ def parseForTokens(openFile):
             while(lineFromFile[0] == ' '):
                 lineFromFile = lineFromFile[1:]
             token = tokenCheck()
-                    
+            ### CODE ###
 
 def tokenCheck():
     tokenString = ""
@@ -57,8 +54,7 @@ def tokenCheck():
         if match:
             if token == "ID" or token == "INTEGER" or token == "REAL":
                 # Check if token is already in symbol table. Add if it isn't.
-                STLoc = symbolTableCheck(### Args ###
-                )
+                STLoc = symbolTableCheck(token, match)
                 tokenString = '<' + token ',' + STLoc + '>'
             elif token == "EQUAL" or token == "COMPARISON" or token == "OP":
                 # Create token with operator.
@@ -70,6 +66,15 @@ def tokenCheck():
             # If a match is found, return the new token.
             return tokenString
 
-def symbolTableCheck(### Args ###
-):
-    
+def symbolTableCheck(token, match):
+    for i in range(0, (len(symbolTable) - 1)):
+        # Check if ID matches.
+        if token == symbolTable[i*2]:
+            # If ID matches, check if the value matches.
+            if match.group(0) == symbolTable[i*2+1]:
+                return i
+    # If the token isn't found in the table, add it.
+    symbolTable.append(token)
+    symbolTable.append(match.group(0))
+    # Return the location of the ID that was just added.
+    return (len(symbolTable) - 2)
