@@ -47,11 +47,11 @@ def parseForTokens(openFile):
                 lineFromFile = lineFromFile[1:]
             token = tokenCheck()
             if token == '<NL>':
-                tokens = tokens + '\n'
+                tokens = tokens + token + '\n'
             else:
                 tokens = tokens + token
-    print(tokens)
-    print(symbolTable)
+    #print(tokens)
+    #print(symbolTable)
 
 def tokenCheck():
     tokenString = ""
@@ -83,17 +83,22 @@ def symbolTableCheck(token, match):
         if token == symbolTable[i*2]:
             # If ID matches, check if the value matches.
             if match.group(0) == symbolTable[i*2+1]:
-                return i
+                return i // 2
     # If the token isn't found in the table, add it.
     symbolTable.append(token)
     symbolTable.append(match.group(0))
     # Return the location of the ID that was just added.
-    return (len(symbolTable) - 2)
+    return len(symbolTable) // 2
 
 def printResults():
-    return
+    print('*** Tokenized Results ***')
+    print(tokens)
+    print('*** Symbol Table ***')
+    for i in range(0,len(symbolTable) // 2):
+        row = str(i+1) + ',' + symbolTable[i*2] + ',' + symbolTable[i*2+1]
+        print(row)
 
 # Functions are defined, let's run the tokenizer.
 openFile = readInFile()
 parseForTokens(openFile)
-#printResults()
+printResults()
