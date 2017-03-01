@@ -8,7 +8,6 @@ fileLoc = ""
 tokens = ""
 symbolTable = []
 lineFromFile = ""
-openFile = readInFile()
 regexMatch = {
     "ID" : "([\w\d_])+",
     "INT" : "int",
@@ -20,7 +19,8 @@ regexMatch = {
     "EQUAL" : "=",
     "TAB" : "\t",
     "NL" : "\n",
-    "COMPARISON" : "(< | = | > | <= | != | >= | == )",
+    "COMPARISON" : "<=|!=|>=|==|<|>]",
+    "COMBO" : "+=|-=|*=|/=",
     "OP" : "[*/+-]",
     "LPAREN" : "\(",
     "RPAREN" : "\)",
@@ -31,11 +31,12 @@ regexMatch = {
 
 # Prompts for file location and opens file.
 def readInFile():
-    fileLoc = input("Enter file to parse:")
-    openFile = open(fileLoc, r)
+    fileLoc = input("Enter file to parse: ")
+    openFile = open(fileLoc)
     return openFile.readlines()
 
 def parseForTokens(openFile):
+    global lineFromFile
     # Read file line-by-line.
     for line in openFile:
         lineFromFile = line
@@ -43,20 +44,26 @@ def parseForTokens(openFile):
             while(lineFromFile[0] == ' '):
                 lineFromFile = lineFromFile[1:]
             token = tokenCheck()
-            ### CODE ###
+            if token == '<NL>':
+                tokens.append('\n')
+            else:
+                tokens.append(token)
+    print(tokens)
+    print(symbolTable)
 
 def tokenCheck():
     tokenString = ""
+    global lineFromFile
     
     for token in regexMatch:
         regex = regexMatch[token]
         match = re.match(regex, lineFromFile)
         if match:
-            if token == "ID" or token == "INTEGER" or token == "REAL":
+            if token == 'ID' or token == 'INTEGER' or token == 'REAL':
                 # Check if token is already in symbol table. Add if it isn't.
                 STLoc = symbolTableCheck(token, match)
-                tokenString = '<' + token ',' + STLoc + '>'
-            elif token == "EQUAL" or token == "COMPARISON" or token == "OP":
+                tokenString = '<' + token + ',' + STLoc + '>'
+            elif token == 'EQUAL' or token == 'COMPARISON' or token == 'OP' or token == 'COMBO':
                 # Create token with operator.
                 tokenString = '<' + token + ',' + match.group(0) + '>'
             else:
@@ -78,3 +85,7 @@ def symbolTableCheck(token, match):
     symbolTable.append(match.group(0))
     # Return the location of the ID that was just added.
     return (len(symbolTable) - 2)
+
+# Functions are defined, let's run the tokenizer.
+openFile = readInFile()
+parseForTokens(openFile)
