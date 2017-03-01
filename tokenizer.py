@@ -58,7 +58,6 @@ def tokenCheck():
     global lineFromFile
     
     for token in regexMatch:
-        print("checking ",token," with ",lineFromFile)
         regex = regexMatch[token]
         match = re.match(regex, lineFromFile)
         if match:
@@ -92,7 +91,8 @@ def symbolTableCheck(token, match):
     return (len(symbolTable) - 2)
 
 def printResults():
-    
+    return
+
 # Functions are defined, let's run the tokenizer.
 openFile = readInFile()
 parseForTokens(openFile)
