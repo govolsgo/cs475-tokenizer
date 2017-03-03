@@ -50,8 +50,6 @@ def parseForTokens(openFile):
                 tokens = tokens + token + '\n'
             else:
                 tokens = tokens + token
-    #print(tokens)
-    #print(symbolTable)
 
 def tokenCheck():
     tokenString = ""
@@ -83,7 +81,7 @@ def symbolTableCheck(token, match):
         if token == symbolTable[i*2]:
             # If ID matches, check if the value matches.
             if match.group(0) == symbolTable[i*2+1]:
-                return i // 2
+                return i+1
     # If the token isn't found in the table, add it.
     symbolTable.append(token)
     symbolTable.append(match.group(0))
