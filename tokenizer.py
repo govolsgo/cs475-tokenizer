@@ -4,7 +4,7 @@
 import re
 import sys
 
-fileLoc = "input.txt"
+fileLoc = ""
 tokens = ""
 symbolTable = []
 lineFromFile = ""
@@ -31,7 +31,7 @@ regexMatch = {
 
 # Prompts for file location and opens file.
 def readInFile():
-    #fileLoc = input("Enter file to parse: ")
+    fileLoc = input("Enter file to parse: ")
     openFile = open(fileLoc)
     return openFile.readlines()
 
